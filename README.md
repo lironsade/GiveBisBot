@@ -8,5 +8,4 @@ As a buyer - You can post an order from a restaurant, get the order status, canc
 When enough people order food from the same restaurant, one of them is picked randomly. That guy gets a message with all of the order details and the restaurant contact info so he would close the order with them.
 
 
-This is a project for the course 67118 OPEN-SOURCE WORKSHOP at HUJI.
-he gets
+This is a project for the course 67118 OPEN-SOURCE WORKSHOP at HUJI.he gets
