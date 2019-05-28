@@ -18,7 +18,7 @@ class SubscribersDatabase:
         self.conn.commit()
 
     def delete(self, rest_id):
-        self.cursor.execute('''DELETE FROM subscribers WHERE id={}'''.format(rest_id))
+        self.cursor.execute('''DELETE FROM Restaurants WHERE id={}'''.format(rest_id))
         self.conn.commit()
 
     def close(self):
