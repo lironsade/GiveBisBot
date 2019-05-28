@@ -142,7 +142,9 @@ def main(api_token):
     dp.add_error_handler(error)
 
     # Start the Bot
+    print('Starting GiveBisBot...')
     updater.start_polling()
+    print('GiveBisBot started!')
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
