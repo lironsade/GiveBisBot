@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
@@ -13,77 +13,71 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-FOOD_TYPE, FOOD_NOTE, LOCATION, PAYMENT = range(4)
+MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(8)
 
 
 def start(bot, update):
-    reply_keyboard = [['Falafel🥙', 'Pizza🍕', 'Other']]
+    reply_keyboard = [['Order', 'Check Status']]
 
     update.message.reply_text(
         'Hi! My name is Give Bis Bot. I will try to help you make an order. '
         'Send /cancel to stop talking to me.\n\n'
-        'What would you like to order?',
+        'What would you like to do?',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    return FOOD_TYPE
+    return INITIAL_BOARD
 
+menu_items = ['Falafel', 'Pizza']
 
-def food_type(bot, update):
+def menu(bot, update):
+    reply_keyboard = [menu_items]
+    update.message.reply_text(
+        'What would you like to order?'
+        'Send /close_order if you ordered everything you want.',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return MENU_PICK
+
+def menu_pick(bot, update):
     user = update.message.from_user
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('I see! Please send me any note about your order, '
-                              'so I know if there is anything special you would like, or send /skip if you don\'t want to.',
-                              reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text('Any notes about this order?')
 
     return FOOD_NOTE
 
-
 def food_note(bot, update):
     user = update.message.from_user
-    logger.info("Food note of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('Nice! Now, send me your location please, '
-                              'or send /skip if you don\'t want to.')
+    update.message.reply_text('What is your name?')
+    logger.info("Food type of %s: %s", user.first_name, update.message.text)
 
-    return LOCATION
+    return NAME
+
+def close_order(bot, update):
+    pass
 
 
-def skip_food_note(bot, update):
+def name(bot, update):
     user = update.message.from_user
-    logger.info("User %s did not specify food note.", user.first_name)
-    update.message.reply_text('OK! Now, send me your location please, '
-                              'or send /skip.')
+    logger.info("User %s is called: %s", user.first_name, update.message.text)
+    update.message.reply_text('What is your location?')
 
     return LOCATION
-
+    
 
 def location(bot, update):
     user = update.message.from_user
-    #user_location = update.message.location
-    #logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
-    #            user_location.longitude)
+    logger.info("Name of %s: %s", user.first_name, update.message.text)
+    update.message.reply_text('What is your phone number?')
+
+    return PHONE
+
+def phone(bot, update):
     user = update.message.from_user
-    logger.info("Location of %s: %s", user.first_name, update.message.text)
+    logger.info("Phone of %s: %s", user.first_name, update.message.text)
+    update.message.reply_text('Thank you for ordering!')
 
-    reply_keyboard = [['Credit Card', 'Cash', 'Other']]
-    update.message.reply_text('Maybe I can visit you sometime! '
-                              'At last, tell me how you are going to pay.',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-        )
+    return ConversationHandler.END
 
-    return PAYMENT
-
-
-def skip_location(bot, update):
-    user = update.message.from_user
-    logger.info("User %s did not send a location.", user.first_name)
-
-    reply_keyboard = [['Credit Card', 'Cash', 'Other']]
-    update.message.reply_text('You seem a bit paranoid! '
-                              'At last, tell me how you are going to pay.',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-        )
-
-    return PAYMENT
 
 
 def payment(bot, update):
@@ -122,15 +116,29 @@ def main(api_token):
         entry_points=[CommandHandler('start', start)],
 
         states={
-            FOOD_TYPE: [RegexHandler('^(Falafel🥙|Pizza🍕|Other)$', food_type)],
+            INITIAL_BOARD: [RegexHandler('^Order$', menu)],
 
-            FOOD_NOTE: [MessageHandler(Filters.text, food_note),
-                    CommandHandler('skip', skip_food_note)],
+            MENU_PICK: [MessageHandler(Filters.text, menu_pick),
+                    CommandHandler('close_order', location)],
 
-            LOCATION: [MessageHandler(Filters.text, location),
-                       CommandHandler('skip', skip_location)],
+            FOOD_NOTE: [MessageHandler(Filters.text, food_note)],
 
-            PAYMENT: [MessageHandler(Filters.text, payment)]
+            NAME: [MessageHandler(Filters.text, name)],
+
+            LOCATION: [MessageHandler(Filters.text, location)],
+
+            PHONE: [MessageHandler(Filters.text, phone)]
+
+
+            #FOOD_TYPE: [RegexHandler('^(Falafel🥙|Pizza🍕|Other)$', food_type)],
+
+            #FOOD_NOTE: [MessageHandler(Filters.text, food_note),
+            #        CommandHandler('skip', skip_food_note)],
+
+            #LOCATION: [MessageHandler(Filters.text, location),
+            #           CommandHandler('skip', skip_location)],
+
+            #PAYMENT: [MessageHandler(Filters.text, payment)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]
