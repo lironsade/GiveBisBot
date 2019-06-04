@@ -4,8 +4,12 @@
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
-
+import subscribers_db
 import logging
+
+
+s_db = subscribers_db.SubscribersDatabase()
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -18,12 +22,13 @@ FOOD_TYPE, FOOD_NOTE, LOCATION, PAYMENT = range(4)
 
 def start(bot, update):
     reply_keyboard = [['Falafel🥙', 'Pizza🍕', 'Other']]
-
+    chat_id = update.message.chat_id
     update.message.reply_text(
         'Hi! My name is Give Bis Bot. I will try to help you make an order. '
         'Send /cancel to stop talking to me.\n\n'
         'What would you like to order?',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+    s_db.insert(chat_id)
 
     return FOOD_TYPE
 
