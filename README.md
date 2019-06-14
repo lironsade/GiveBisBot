@@ -1,4 +1,4 @@
-GiveBisBot is a food ordering and restaurant management system, operrating on Telegram app platform (Telegram bot). The bot is available for buyers located only at Giva'at-Ram, Jerusalem, Israel HUJI campus and for sellers located in Jerusalem, Israel.
+GiveBisBot is a food ordering management system, operrating on Telegram app platform (Telegram bot). The bot is available for Owners of restaurants.
 
 ### Documentation and Installation
 The best place to learn about GiveBisBot and how to use it, is by going over our WIKI.
