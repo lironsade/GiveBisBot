@@ -3,7 +3,7 @@ from .fooditem import FoodItem
 DEFAULT_PRICE = 50
 
 
-class order:
+class Order:
     class FoodType:
         def __init__(self, name, price, notes=None):
             self.type = FoodItem(name, price)
