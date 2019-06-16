@@ -1,4 +1,4 @@
-from .fooditem import FoodItem
+from fooditem import FoodItem
 
 
 class Order:
@@ -38,7 +38,8 @@ class Order:
         self.my_orders.pop(item)
 
     def __str__(self):
-        return f"{food_order.__str__() for food_order in self.my_orders.values()}"
+
+        return f"{list(food_order.__str__() for food_order in self.my_orders.values())}"
 
     def get_status(self):
         return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__str__()}"
