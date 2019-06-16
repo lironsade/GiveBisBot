@@ -6,6 +6,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
                           ConversationHandler)
 
 import logging
+from Constants import *
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -20,9 +21,7 @@ def start(bot, update):
     reply_keyboard = [['Order', 'Check Status']]
 
     update.message.reply_text(
-        'Hi! My name is Give Bis Bot. I will try to help you make an order. '
-        'Send /cancel to stop talking to me.\n\n'
-        'What would you like to do?',
+        START_MSG,
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return INITIAL_BOARD
@@ -32,8 +31,7 @@ menu_items = ['Falafel', 'Pizza']
 def menu(bot, update):
     reply_keyboard = [menu_items]
     update.message.reply_text(
-        'What would you like to order?'
-        'Send /close_order if you ordered everything you want.',
+        MENU_MSG,
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return MENU_PICK
@@ -59,7 +57,7 @@ def name(bot, update, user_data):
     user = update.message.from_user
     user_data['name'] = update.message.text
     logger.info("User %s is called: %s", user.first_name, update.message.text)
-    update.message.reply_text('What is your location?')
+    update.message.reply_text(LOC_MSG)
 
     return LOCATION
     
@@ -68,7 +66,7 @@ def location(bot, update, user_data):
     user = update.message.from_user
     user_data['location'] = update.message.text
     logger.info("Name of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('What is your phone number?')
+    update.message.reply_text(PHIE_NUM_MSG)
 
     return PHONE
 
@@ -89,7 +87,7 @@ def d_to_str(d):
 def payment(bot, update):
     user = update.message.from_user
     logger.info("Payment of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('Thank you! I hope we can talk again some day.',
+    update.message.reply_text(PAYMENT_MSG,
             reply_markup=ReplyKeyboardRemove()
             )
 
@@ -99,7 +97,7 @@ def payment(bot, update):
 def cancel(bot, update):
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
-    update.message.reply_text('Bye! I hope we can talk again some day.',
+    update.message.reply_text(AFTER_CANCEL_MSG,
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
