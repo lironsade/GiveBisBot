@@ -16,8 +16,7 @@ class Order:
             self.notes.append(note)
 
         def __str__(self):
-            return f"{self.item.__str__()}  \n Your notes:  {self.notes} \n"
-
+            return f"{self.item.__str__() + ', amount: ' + str(len(self.notes))}. \nYour notes:  {self.notes}. \n"
 
     def __init__(self, name, location, payment):
         self._name = name
@@ -28,9 +27,9 @@ class Order:
     def place_order(self, item, note):
         assert isinstance(item, FoodItem)
         if item.name not in self.my_orders:
-            self.my_orders[item.name] = Order.FoodTypeOrder(item, '(1) ' + note)
+            self.my_orders[item.name] = Order.FoodTypeOrder(item, note)
         else:
-            self.my_orders[item.name].add_note("(" + str(1 + len(self.my_orders[item.name].notes)) + ") " + note)
+            self.my_orders[item.name].add_note(note)
 
     def remove_order(self, item):
         self.my_orders.pop(item)
@@ -48,30 +47,5 @@ class Order:
         return f"{reprs}"
 
     def get_status(self):
-        return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__str__()}"
+        return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__repr__()}"
 
-
-
-if __name__ == '__main__':
-    falafel = FoodItem('Falafel', 15)
-    pizza = FoodItem('Pizza', 10)
-    sabich = FoodItem('Sabich', 25)
-    salad = FoodItem('Salad', 159)
-
-    order = Order('liron', 'huji', 'chocolate bar')
-    # order.place_order(falafel, "חומוס, צ'יפס, סלט עם קולה ובלי חריף דיר בלאק")
-    # order.place_order(pizza, "פטריות ובצל. אה, מקמח מלא")
-    # order.place_order(pizza, "פיצה רגילה")
-    # order.place_order(sabich, "בטעות לחצתי על סביח אני בכלל לא אוהב את זה")
-    # order.place_order(salad, "פלאפל, פיצה וסביח למה אני מת מרעב ואיתי אמר שסלט לא משביע ובפרט אוכל של בנות "
-    #                          "ובנות לא שבעות הרי")
-
-    order.place_order(falafel, "falafel")
-    order.place_order(pizza, "pizza1")
-    order.place_order(pizza, "pizza2")
-    order.place_order(sabich, "sabich")
-    order.place_order(salad, "salad")
-
-    # for key in (order.my_orders.keys()):
-    #     print(order.my_orders[key])
-    print(order.__repr__())
