@@ -18,12 +18,12 @@ class Order:
         def __str__(self):
             return f"{self.item.__str__()}  \n Your notes:  {self.notes} \n"
 
-    my_orders = {}
 
     def __init__(self, name, location, payment):
         self._name = name
         self._location = location
         self._payment = payment
+        self.my_orders = dict()
 
     def place_order(self, item, note):
         assert isinstance(item, FoodItem)
@@ -44,8 +44,8 @@ class Order:
 
     def __repr__(self):
         reprs = ''
-        for key in (order.my_orders.keys()):
-            reprs += order.my_orders[key].__str__()
+        for key in (self.my_orders.keys()):
+            reprs += self.my_orders[key].__str__()
         return f"{reprs}"
 
     def get_status(self):

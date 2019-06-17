@@ -8,6 +8,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 import logging
 import constants
 import menu
+from order import Order
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -79,13 +80,18 @@ def phone(bot, update, user_data):
     user = update.message.from_user
     user_data['phone'] = update.message.text
     logger.info("Phone of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('Your order is:\n' + d_to_str(user_data) + '\nThank you for ordering!')
+    user_data['order'] = CreateOrderFromData(user_data)
+    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!')
 
     return ConversationHandler.END
 
 def d_to_str(d):
     return f"{d['name']} ordered {d['type']} with note {d['note']} and to location {d['location']} with phone {d['phone']}"
 
+def CreateOrderFromData(data):
+    order = Order(data['name'], data['location'], data['phone'])
+    order.place_order(rest_menu.GetItem(data['type']), data['note'])
+    return order
     
 
 
