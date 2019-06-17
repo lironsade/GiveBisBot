@@ -16,8 +16,7 @@ class Order:
             self.notes.append(note)
 
         def __str__(self):
-            return f"{self.item.__str__()}  \n Your notes:  {self.notes} \n"
-
+            return f"{self.item.__str__() + ', amount: ' + str(len(self.notes))}. \nYour notes:  {self.notes}. \n"
 
     def __init__(self, name, location, payment):
         self._name = name
@@ -28,18 +27,17 @@ class Order:
     def place_order(self, item, note):
         assert isinstance(item, FoodItem)
         if item.name not in self.my_orders:
-            self.my_orders[item.name] = Order.FoodTypeOrder(item, '(1) ' + note)
+            self.my_orders[item.name] = Order.FoodTypeOrder(item, note)
         else:
-            self.my_orders[item.name].add_note("(" + str(1 + len(self.my_orders[item.name].notes)) + ") " + note)
+            self.my_orders[item.name].add_note(note)
 
     def remove_order(self, item):
         self.my_orders.pop(item)
 
     def total_cost(self):
         total = 0
-        for key in self.my_orders.keys():
-            for j in range(len(self.my_orders[key].notes)):
-                total += self.my_orders[key].item.price
+        for key in self.my_orders:
+            total += self.my_orders[key].item.price * len(self.my_orders[key].notes)
         return total
 
     def __repr__(self):
@@ -49,4 +47,5 @@ class Order:
         return f"{reprs}"
 
     def get_status(self):
-        return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__str__()}"
+        return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__repr__()}"
+
