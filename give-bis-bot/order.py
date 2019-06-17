@@ -15,9 +15,6 @@ class Order:
         def add_note(self, note):
             self.notes.append(note)
 
-        # def delete_note(self, note):
-        #     self.notes.remove(note)
-
         def __str__(self):
             return f"{self.item.__str__()}  \n Your notes:  {self.notes} \n"
 
@@ -29,17 +26,20 @@ class Order:
         self._payment = payment
 
     def place_order(self, item, note):
-        if item not in self.my_orders.keys():
-            self.my_orders[item] = Order.FoodTypeOrder(item, note)
+        assert isinstance(item, FoodItem)
+        if item.name not in self.my_orders:
+            self.my_orders[item.name] = Order.FoodTypeOrder(item, '(1) ' + note)
         else:
-            self.my_orders[item].add_note(note)
+            self.my_orders[item.name].add_note("(" + str(1 + len(self.my_orders[item.name].notes)) + ") " + note)
 
     def remove_order(self, item):
         self.my_orders.pop(item)
 
-    def __str__(self):
-
-        return f"{list(food_order.__str__() for food_order in self.my_orders.values())}"
+    def __repr__(self):
+        reprs = ''
+        for key in (order.my_orders.keys()):
+            reprs += order.my_orders[key].__str__()
+        return f"{reprs}"
 
     def get_status(self):
         return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__str__()}"
