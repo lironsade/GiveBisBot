@@ -46,7 +46,7 @@ def menu_pick(bot, update, user_data):
     user = update.message.from_user
     user_data['type'] = update.message.text
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('Any notes about this order?')
+    update.message.reply_text('Any notes about this order? /skip if you don\'t have one')
 
     return FOOD_NOTE
 
@@ -58,6 +58,14 @@ def food_note(bot, update, user_data):
 
     return NAME
 
+
+def skip_food_note(bot, update, user_data):
+    user = update.message.from_user
+    user_data['note'] = ''
+    update.message.reply_text('What is your name?')
+    logger.info("%s skipped food note", user.first_name)
+
+    return NAME
 
 def name(bot, update, user_data):
     user = update.message.from_user
@@ -136,7 +144,10 @@ def main(api_token):
             MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
                     CommandHandler('close_order', location, pass_user_data=True)],
 
-            FOOD_NOTE: [MessageHandler(Filters.text, food_note, pass_user_data=True)],
+            FOOD_NOTE: [
+                MessageHandler(Filters.text, food_note, pass_user_data=True),
+                CommandHandler('skip', skip_food_note, pass_user_data=True)
+                ],
 
             NAME: [MessageHandler(Filters.text, name, pass_user_data=True)],
 
