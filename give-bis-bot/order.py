@@ -37,9 +37,8 @@ class Order:
 
     def total_cost(self):
         total = 0
-        for key in self.my_orders.keys():
-            for j in range(len(self.my_orders[key].notes)):
-                total += self.my_orders[key].item.price
+        for key in self.my_orders:
+            total += self.my_orders[key].item.price * len(self.my_orders[key].notes)
         return total
 
     def __repr__(self):
@@ -50,3 +49,29 @@ class Order:
 
     def get_status(self):
         return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__str__()}"
+
+
+
+if __name__ == '__main__':
+    falafel = FoodItem('Falafel', 15)
+    pizza = FoodItem('Pizza', 10)
+    sabich = FoodItem('Sabich', 25)
+    salad = FoodItem('Salad', 159)
+
+    order = Order('liron', 'huji', 'chocolate bar')
+    # order.place_order(falafel, "חומוס, צ'יפס, סלט עם קולה ובלי חריף דיר בלאק")
+    # order.place_order(pizza, "פטריות ובצל. אה, מקמח מלא")
+    # order.place_order(pizza, "פיצה רגילה")
+    # order.place_order(sabich, "בטעות לחצתי על סביח אני בכלל לא אוהב את זה")
+    # order.place_order(salad, "פלאפל, פיצה וסביח למה אני מת מרעב ואיתי אמר שסלט לא משביע ובפרט אוכל של בנות "
+    #                          "ובנות לא שבעות הרי")
+
+    order.place_order(falafel, "falafel")
+    order.place_order(pizza, "pizza1")
+    order.place_order(pizza, "pizza2")
+    order.place_order(sabich, "sabich")
+    order.place_order(salad, "salad")
+
+    # for key in (order.my_orders.keys()):
+    #     print(order.my_orders[key])
+    print(order.__repr__())
