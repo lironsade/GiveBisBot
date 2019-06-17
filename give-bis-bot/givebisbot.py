@@ -20,7 +20,6 @@ MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = rang
 
 rest_menu = menu.Menu(menu.sample_menu_dict)
 menu_items = rest_menu.AllText()
-print(menu_items)
 
 def start(bot, update):
     reply_keyboard = [['Order', 'Check Status']]
@@ -34,7 +33,6 @@ def start(bot, update):
 
 def menu(bot, update):
     reply_keyboard = [menu_items]
-    print(reply_keyboard)
     update.message.reply_text(
         constants.MENU_MSG,
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
