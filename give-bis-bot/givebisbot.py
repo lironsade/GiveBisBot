@@ -7,6 +7,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 
 import logging
 import constants
+import menu
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(8)
 
+rest_menu = menu.Menu(menu.sample_menu_dict)
 
 def start(bot, update):
     reply_keyboard = [['Order', 'Check Status']]
@@ -26,7 +28,7 @@ def start(bot, update):
 
     return INITIAL_BOARD
 
-menu_items = ['Falafel', 'Pizza']
+menu_items = rest_menu.AllText()
 
 def menu(bot, update):
     reply_keyboard = [menu_items]
@@ -37,6 +39,7 @@ def menu(bot, update):
     return MENU_PICK
 
 def menu_pick(bot, update, user_data):
+    #user_data['order'] = Order()
     user = update.message.from_user
     user_data['type'] = update.message.text
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
