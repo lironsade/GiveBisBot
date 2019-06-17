@@ -35,6 +35,13 @@ class Order:
     def remove_order(self, item):
         self.my_orders.pop(item)
 
+    def total_cost(self):
+        total = 0
+        for key in self.my_orders.keys():
+            for j in range(len(self.my_orders[key].notes)):
+                total += self.my_orders[key].item.price
+        return total
+
     def __repr__(self):
         reprs = ''
         for key in (order.my_orders.keys()):
