@@ -51,25 +51,37 @@ def menu_pick(bot, update, user_data):
     return FOOD_NOTE
 
 def food_note(bot, update, user_data):
+    reply_keyboard = [menu_items]
     user = update.message.from_user
     if 'note' not in user_data:
         user_data['note'] = []
     user_data['note'].append(update.message.text)
-    update.message.reply_text('What is your name?')
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
+    update.message.reply_text(
+        'Anything else, or /close_order ?',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    return NAME
+    return MENU_PICK
 
 
 def skip_food_note(bot, update, user_data):
     user = update.message.from_user
     if 'note' not in user_data:
         user_data['note'] = []
-    user_data['note'].append('')
-    update.message.reply_text('What is your name?')
+    user_data['note'].append('no note')
     logger.info("%s skipped food note", user.first_name)
+    reply_keyboard = [menu_items]
+    update.message.reply_text(
+        'Anything else, or /close_order ?',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
+    return MENU_PICK
+
+def close_order(bot, update, user_data):
+    user = update.message.from_user
+    update.message.reply_text('Thank you for ordering! What is your name?', reply_markup=ReplyKeyboardRemove())
     return NAME
+
 
 def name(bot, update, user_data):
     user = update.message.from_user
@@ -146,7 +158,7 @@ def main(api_token):
             INITIAL_BOARD: [RegexHandler('^Order$', menu)],
 
             MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
-                    CommandHandler('close_order', location, pass_user_data=True)],
+                    CommandHandler('close_order', close_order, pass_user_data=True)],
 
             FOOD_NOTE: [
                 MessageHandler(Filters.text, food_note, pass_user_data=True),
