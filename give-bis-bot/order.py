@@ -48,4 +48,4 @@ class Order:
         return f"{reprs}"
 
     def get_status(self):
-        return f"Name: {self._name} \n Location: {self._location} \n Phone: {self._phone}\n Order: {self.__repr__()}"
+        return self.__repr__()
