@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(8)
+STATUS, MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(9)
 
 rest_menu = menu.Menu(menu.sample_menu_dict)
 menu_items = rest_menu.AllText()
@@ -144,6 +144,16 @@ def error(bot, update, error):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+def check_status(bot, update, user_data):
+    order_text = 'You have\'t placed an order.'
+    if 'order' in user_data:
+        order_text = repr(user_data['order'])
+    update.message.reply_text(order_text,
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
+    )
+
+    return INITIAL_BOARD
+    
 
 def main(api_token):
     # Create the EventHandler and pass it your bot's token.
@@ -157,7 +167,8 @@ def main(api_token):
         entry_points=[CommandHandler('start', start)],
 
         states={
-            INITIAL_BOARD: [RegexHandler('^Order$', menu)],
+            INITIAL_BOARD: [RegexHandler('^Order$', menu),
+                            RegexHandler('^Check Status$', check_status, pass_user_data=True)],
 
             MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
                     CommandHandler('close_order', close_order, pass_user_data=True)],
