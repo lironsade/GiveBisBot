@@ -63,6 +63,8 @@ def food_note(bot, update, user_data):
 
 def skip_food_note(bot, update, user_data):
     user = update.message.from_user
+    if 'note' not in user_data:
+        user_data['note'] = []
     user_data['note'] = ''
     update.message.reply_text('What is your name?')
     logger.info("%s skipped food note", user.first_name)
@@ -100,7 +102,8 @@ def d_to_str(d):
 
 def CreateOrderFromData(data):
     order = Order(data['name'], data['location'], data['phone'])
-    order.place_order(rest_menu.GetItem(data['type']), data['note'])
+    for item_type, item_note in zip(data['type'], data['note']):
+        order.place_order(rest_menu.GetItem(item_type, item_note)
     return order
 
 
