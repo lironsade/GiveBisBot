@@ -167,7 +167,8 @@ def main(api_token):
         entry_points=[CommandHandler('start', start)],
 
         states={
-            INITIAL_BOARD: [RegexHandler('^Order$', menu)],
+            INITIAL_BOARD: [RegexHandler('^Order$', menu),
+                            RegexHandler('^Check Status$', check_status, pass_user_data=True)],
 
             MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
                     CommandHandler('close_order', close_order, pass_user_data=True)],
