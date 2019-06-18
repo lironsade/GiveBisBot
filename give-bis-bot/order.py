@@ -44,6 +44,7 @@ class Order:
         reprs = ''
         for key in (self.my_orders.keys()):
             reprs += self.my_orders[key].__str__()
+        reprs += f". Customer name: {self.name}. Customer location: {self.location}."
         return f"{reprs}"
 
     def get_status(self):
