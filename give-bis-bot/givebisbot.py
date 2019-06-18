@@ -52,7 +52,9 @@ def menu_pick(bot, update, user_data):
 
 def food_note(bot, update, user_data):
     user = update.message.from_user
-    user_data['note'] = update.message.text
+    if 'note' not in user_data:
+        user_data['note'] = []
+    user_data['note'].append(update.message.text)
     update.message.reply_text('What is your name?')
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
 
