@@ -144,7 +144,7 @@ def error(bot, update, error):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
-def order_status(bot, update, user_data):
+def check_status(bot, update, user_data):
     order_text = 'You have\'t placed an order.'
     if 'order' in user_data:
         order_text = repr(user_data['order'])
