@@ -16,10 +16,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(8)
+STATUS, MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(9)
 
 rest_menu = menu.Menu(menu.sample_menu_dict)
 menu_items = rest_menu.AllText()
+start_keyboard = [['Order', 'Check Status']]
 
 with open('orders.csv', 'w', newline='') as outcsv:
     writer = csv.writer(outcsv)
@@ -27,10 +28,10 @@ with open('orders.csv', 'w', newline='') as outcsv:
 
 
 def start(bot, update):
-    reply_keyboard = [['Order', 'Check Status']]
+
     update.message.reply_text(
         constants.START_MSG,
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True))
 
     return INITIAL_BOARD
 
@@ -116,14 +117,15 @@ def phone(bot, update, user_data):
     user_data['phone'] = update.message.text
     logger.info("Phone of %s: %s", user.first_name, update.message.text)
     user_data['order'] = CreateOrderFromData(user_data)
-    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!')
-    # print(user_data)
+    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!',
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True))
     with open('orders.csv', 'a', newline='') as outcsv2:
         writer2 = csv.writer(outcsv2)
         writer2.writerow(
             [user_data['chat_id'], user_data['type'], user_data['note'], user_data['name'], user_data['location'],
              user_data['phone'], user_data['order']])
-    return ConversationHandler.END
+    return INITIAL_BOARD
+
 
 
 def d_to_str(d):
@@ -161,6 +163,16 @@ def error(bot, update, error):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+def check_status(bot, update, user_data):
+    order_text = 'You have\'t placed an order.'
+    if 'order' in user_data:
+        order_text = repr(user_data['order'])
+    update.message.reply_text(order_text,
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
+    )
+
+    return INITIAL_BOARD
+    
 
 def main(api_token):
     # Create the EventHandler and pass it your bot's token.
@@ -174,7 +186,8 @@ def main(api_token):
         entry_points=[CommandHandler('start', start)],
 
         states={
-            INITIAL_BOARD: [RegexHandler('^Order$', menu)],
+            INITIAL_BOARD: [RegexHandler('^Order$', menu),
+                            RegexHandler('^Check Status$', check_status, pass_user_data=True)],
 
             MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
                         CommandHandler('close_order', close_order, pass_user_data=True)],

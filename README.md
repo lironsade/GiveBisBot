@@ -7,7 +7,7 @@ GiveBisBot is a food ordering management system, operrating on Telegram app plat
 ![screenshot2](screenshots/3.jpg?raw=true "thank you")
 
 ### Documentation and Installation
-The best place to learn about GiveBisBot and how to use it, is by going over our WIKI.
+The best place to learn about GiveBisBot and how to use it, is by going over our [WIKI](https://github.cs.huji.ac.il/liron/GiveBisBot/wiki).
 
 ### Issues
 Please report bugs using the [GitHub issue tracker](https://github.cs.huji.ac.il/liron/GiveBisBot/issues)
