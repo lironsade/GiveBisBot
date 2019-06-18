@@ -20,13 +20,13 @@ MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = rang
 
 rest_menu = menu.Menu(menu.sample_menu_dict)
 menu_items = rest_menu.AllText()
+start_keyboard = [['Order', 'Check Status']]
 
 def start(bot, update):
-    reply_keyboard = [['Order', 'Check Status']]
 
     update.message.reply_text(
         constants.START_MSG,
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True))
 
     return INITIAL_BOARD
 
@@ -105,9 +105,11 @@ def phone(bot, update, user_data):
     user_data['phone'] = update.message.text
     logger.info("Phone of %s: %s", user.first_name, update.message.text)
     user_data['order'] = CreateOrderFromData(user_data)
-    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!')
+    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!',
+        reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True)
+    )
 
-    return ConversationHandler.END
+    return INITIAL_BOARD
 
 def d_to_str(d):
     return f"{d['name']} ordered {d['type']} with note {d['note']} and to location {d['location']} with phone {d['phone']}"
