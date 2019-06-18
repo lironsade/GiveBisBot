@@ -4,7 +4,6 @@
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
-# import subscribers_db
 import csv
 import logging
 import constants
@@ -12,7 +11,6 @@ import menu
 from order import Order
 
 
-# s_db = subscribers_db.SubscribersDatabase()
 
 
 # Enable logging
@@ -26,9 +24,11 @@ MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = rang
 rest_menu = menu.Menu(menu.sample_menu_dict)
 menu_items = rest_menu.AllText()
 
-with open('orders.csv', 'w') as csvfile:
-    filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    filewriter.writerow(['type', 'note', 'name', 'location', 'phone', 'order'])
+with open('orders.csv', 'w', newline='') as outcsv:
+    writer = csv.writer(outcsv)
+    writer.writerow(['type', 'note', 'name', 'location', 'phone', 'order'])
+
+
 
 
 def start(bot, update):
@@ -38,7 +38,6 @@ def start(bot, update):
     update.message.reply_text(
         constants.START_MSG,
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
-    s_db.insert(chat_id)
 
     return INITIAL_BOARD
 
@@ -118,11 +117,10 @@ def phone(bot, update, user_data):
     logger.info("Phone of %s: %s", user.first_name, update.message.text)
     user_data['order'] = CreateOrderFromData(user_data)
     update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!')
-    print(user_data)
-    print(type(user_data))
-    with open('orders.csv', 'w') as csvfile:
-        filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        filewriter.writerow([user_data['type'], user_data['note'], user_data['name'], user_data['location'], user_data['phone'], user_data['order']])
+    # print(user_data)
+    with open('orders.csv', 'a', newline='') as outcsv:
+        writer = csv.writer(outcsv)
+        writer.writerow([user_data['type'], user_data['note'], user_data['name'], user_data['location'], user_data['phone'], user_data['order']])
     return ConversationHandler.END
 
 def d_to_str(d):
