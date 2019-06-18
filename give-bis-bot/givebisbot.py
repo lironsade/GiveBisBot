@@ -42,7 +42,9 @@ def menu(bot, update):
 def menu_pick(bot, update, user_data):
     #user_data['order'] = Order()
     user = update.message.from_user
-    user_data['type'] = update.message.text
+    if 'type' not in user_data:
+        user_data['type'] = []
+    user_data['type'].append(update.message.text)
     logger.info("Food type of %s: %s", user.first_name, update.message.text)
     update.message.reply_text('Any notes about this order? /skip if you don\'t have one')
 
@@ -98,7 +100,6 @@ def CreateOrderFromData(data):
     order = Order(data['name'], data['location'], data['phone'])
     order.place_order(rest_menu.GetItem(data['type']), data['note'])
     return order
-    
 
 
 def payment(bot, update):
