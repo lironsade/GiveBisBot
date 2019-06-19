@@ -44,8 +44,8 @@ class Order:
         reprs = ''
         for key in (self.my_orders.keys()):
             reprs += self.my_orders[key].__str__()
+        reprs += f"Customer name: {self._name}.\nCustomer location: {self._location}."
         return f"{reprs}"
 
     def get_status(self):
         return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__repr__()}"
-
