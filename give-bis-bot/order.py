@@ -18,10 +18,10 @@ class Order:
         def __str__(self):
             return f"{self.item.__str__() + ', amount: ' + str(len(self.notes))}. \nYour notes:  {self.notes}. \n"
 
-    def __init__(self, name, location, payment):
+    def __init__(self, name, location, phone):
         self._name = name
         self._location = location
-        self._payment = payment
+        self._phone = phone
         self.my_orders = dict()
 
     def place_order(self, item, note):
@@ -44,8 +44,8 @@ class Order:
         reprs = ''
         for key in (self.my_orders.keys()):
             reprs += self.my_orders[key].__str__()
-        reprs += f"Customer name: {self._name}.\nCustomer location: {self._location}."
+        reprs += f"Customer name: {self._name}.\nCustomer location: {self._location}.\nCustomer phone: {self._phone}."
         return f"{reprs}"
 
     def get_status(self):
-        return f"Name: {self._name} \n Location: {self._location} \n Payment: {self._payment}\n Order: {self.__repr__()}"
+        return self.__repr__()
