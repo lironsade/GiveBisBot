@@ -23,7 +23,7 @@ menu_items = rest_menu.AllText()
 
 with open('orders.csv', 'w', newline='') as outcsv:
     writer = csv.writer(outcsv)
-    writer.writerow(['chat_id','type', 'note', 'name', 'location', 'phone', 'order description'])
+    writer.writerow(['chat_id', 'type', 'note', 'name', 'location', 'phone', 'order description'])
 
 
 def start(bot, update):
