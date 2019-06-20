@@ -200,8 +200,8 @@ def main(api_token):
             NAME: [MessageHandler(Filters.text, name, pass_user_data=True)],
 
             LOCATION: [MessageHandler(Filters.text, location, pass_user_data=True)],
-
-            PHONE: [MessageHandler(Filters.text, phone, pass_user_data=True)]
+			
+			PHONE: [RegexHandler('^0([57]\d|[23489])\d{7}$', phone, pass_user_data=True)]
 
             # FOOD_TYPE: [RegexHandler('^(Falafel🥙|Pizza🍕|Other)$', food_type)],
 
