@@ -8,6 +8,7 @@ import csv
 import logging
 import constants
 import menu
+from config import ORDERS_BROADCAST_CHANNEL_ID
 from order import Order
 
 # Enable logging
@@ -117,8 +118,12 @@ def phone(bot, update, user_data):
     user_data['phone'] = update.message.text
     logger.info("Phone of %s: %s", user.first_name, update.message.text)
     user_data['order'] = CreateOrderFromData(user_data)
-    update.message.reply_text('Your order is:\n' + repr(user_data['order']) + '\nThank you for ordering!',
+    order_desc = repr(user_data['order'])
+    update.message.reply_text('Your order is:\n' + order_desc + '\nThank you for ordering!',
         reply_markup=ReplyKeyboardMarkup(start_keyboard, one_time_keyboard=True))
+    bot.send_message(chat_id=ORDERS_BROADCAST_CHANNEL_ID,
+                     text=f'New order:\n{order_desc}')
+
     with open('orders.csv', 'a', newline='') as outcsv2:
         writer2 = csv.writer(outcsv2)
         writer2.writerow(
@@ -207,7 +212,7 @@ def main(api_token):
 			
 	    PHONE: [RegexHandler('^0([57]\d|[23489])\d{7}$', phone, pass_user_data=True)]
 
-
+            },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
 
