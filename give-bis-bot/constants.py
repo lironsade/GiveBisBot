@@ -5,7 +5,7 @@ MENU_MSG = "What would you like to order? Send /close_order if you ordered every
 
 LOC_MSG = "What is your location?"
 
-PHIE_NUM_MSG = "What is your phone number?"
+PHIE_NUM_MSG = "What is your phone number? please enter correct number"
 
 PAYMENT_MSG = "Thank you! I hope we can talk again some day."
 
