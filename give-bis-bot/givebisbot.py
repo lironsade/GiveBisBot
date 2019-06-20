@@ -186,33 +186,27 @@ def main(api_token):
         entry_points=[CommandHandler('start', start)],
 
         states={
-            INITIAL_BOARD: [RegexHandler('^Order$', menu),
-                            RegexHandler('^Check Status$', check_status, pass_user_data=True)],
+            INITIAL_BOARD: [
+                    RegexHandler('^Order$', menu),
+                    RegexHandler('^Check Status$', check_status, pass_user_data=True)
+                ],
 
-            MENU_PICK: [MessageHandler(Filters.text, menu_pick, pass_user_data=True),
-                        CommandHandler('close_order', close_order, pass_user_data=True)],
+            MENU_PICK: [
+                    MessageHandler(Filters.text, menu_pick, pass_user_data=True),
+                    CommandHandler('close_order', close_order, pass_user_data=True)
+                ],
 
             FOOD_NOTE: [
-                MessageHandler(Filters.text, food_note, pass_user_data=True),
-                CommandHandler('skip', skip_food_note, pass_user_data=True)
-            ],
+                    MessageHandler(Filters.text, food_note, pass_user_data=True),
+                    CommandHandler('skip', skip_food_note, pass_user_data=True)
+                ],
 
             NAME: [MessageHandler(Filters.text, name, pass_user_data=True)],
 
             LOCATION: [MessageHandler(Filters.text, location, pass_user_data=True)],
 			
-			PHONE: [RegexHandler('^0([57]\d|[23489])\d{7}$', phone, pass_user_data=True)]
+	    PHONE: [RegexHandler('^0([57]\d|[23489])\d{7}$', phone, pass_user_data=True)]
 
-            # FOOD_TYPE: [RegexHandler('^(Falafel🥙|Pizza🍕|Other)$', food_type)],
-
-            # FOOD_NOTE: [MessageHandler(Filters.text, food_note),
-            #        CommandHandler('skip', skip_food_note)],
-
-            # LOCATION: [MessageHandler(Filters.text, location),
-            #           CommandHandler('skip', skip_location)],
-
-            # PAYMENT: [MessageHandler(Filters.text, payment)]
-        },
 
         fallbacks=[CommandHandler('cancel', cancel)]
     )
