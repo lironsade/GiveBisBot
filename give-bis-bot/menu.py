@@ -1,4 +1,7 @@
 from fooditem import FoodItem
+import csv
+
+ITEM_NAME, ITEM_PRICE = range(2)
 
 class Menu:
     def __init__(self, items=None):
@@ -19,4 +22,6 @@ class Menu:
     def AllText(self):
         return list(self.items.keys())
 
-sample_menu_dict = { 'Falafel' : FoodItem('Falafel', 15), 'Pizza': FoodItem('Pizza', 20) }
+    def crete_menu_from_csv_file(self, csv_reader):
+        for row in csv_reader:
+            self.items[row[ITEM_NAME]] = FoodItem(row[ITEM_NAME], row[ITEM_PRICE])
