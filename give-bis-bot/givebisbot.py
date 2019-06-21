@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 STATUS, MENU_PICK, PHONE, INITIAL_BOARD, MENU, FOOD_NOTE, NAME, LOCATION, PAYMENT = range(9)
 
-rest_menu = menu.Menu(menu.sample_menu_dict)
-menu_items = rest_menu.AllText()
+rest_menu = menu.Menu()
+
 start_keyboard = [['Order', 'Check Status']]
 
 with open('orders.csv', 'w', newline='') as outcsv:
@@ -38,7 +38,7 @@ def start(bot, update):
 
 
 def menu(bot, update):
-    reply_keyboard = [menu_items]
+    reply_keyboard = [rest_menu.AllText()]
     update.message.reply_text(
         constants.MENU_MSG,
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
@@ -62,7 +62,7 @@ def menu_pick(bot, update, user_data):
 
 
 def food_note(bot, update, user_data):
-    reply_keyboard = [menu_items]
+    reply_keyboard = [rest_menu.AllText()]
     user = update.message.from_user
     if 'note' not in user_data:
         user_data['note'] = []
@@ -81,7 +81,7 @@ def skip_food_note(bot, update, user_data):
         user_data['note'] = []
     user_data['note'].append('no note')
     logger.info("%s skipped food note", user.first_name)
-    reply_keyboard = [menu_items]
+    reply_keyboard = [rest_menu.AllText()]
     update.message.reply_text(
         'Anything else, or /close_order ?',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
@@ -180,6 +180,12 @@ def check_status(bot, update, user_data):
     
 
 def main(api_token):
+
+    with open('menu.csv', 'r', newline='') as menucsv:
+        csv_reader = csv.reader(menucsv, delimiter=',', quotechar='|')
+        rest_menu.crete_menu_from_csv_file(csv_reader)
+    menu_items = rest_menu.AllText()
+
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(api_token)
 
