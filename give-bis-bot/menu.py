@@ -1,16 +1,14 @@
 from fooditem import FoodItem
 import csv
 
-NUM_OF_ITEMS = 2
-
-ITEM_NAME, ITEM_PRICE = range(NUM_OF_ITEMS)
+ITEM_NAME, ITEM_PRICE = range(2)
 
 class Menu:
     def __init__(self, items=None):
         if items:
             self.items = items
         else:
-            self.items = {}
+            self.items = dict()
 
     def AddItem(self, fooditem):
         self.items.append(fooditem)
@@ -22,7 +20,7 @@ class Menu:
         return self.items.get(name, None)
 
     def AllText(self):
-        return [self.items.keys()]
+        return list(self.items.keys())
 
     def crete_menu_from_csv_file(self, csv_reader):
         for row in csv_reader:
