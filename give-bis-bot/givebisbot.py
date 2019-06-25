@@ -240,7 +240,7 @@ def main(api_token):
 
 if __name__ == '__main__':
     import sys
-
+    logging.info("starting server")
     if len(sys.argv) < 2:
         print('Please use bot API KEY as an argumnet')
     main(sys.argv[1])
