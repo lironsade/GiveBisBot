@@ -17,6 +17,16 @@ Thank you to all the people who already contributed to GiveBisBot!
 ## Author
 GiveBisBot was created by [Liron Sade](https://github.cs.huji.ac.il/liron), [Arie Shtine](https://github.cs.huji.ac.il/arie-shtine) and [Avichail Vogel](https://github.cs.huji.ac.il/avichail).
 
+## Contact Us
+Telegram:
+
+Liron Sade - https://t.me/ar_nav
+
+Arie Shtine - https://t.me/Dr_List
+
+Avichail Vogel - https://t.me/TheTruth76
+
+
 ## License
 Copyright (c) 2019-present Liron Sade, Arie Shtine and Avichail Vogel.
 
