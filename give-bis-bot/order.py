@@ -22,7 +22,7 @@ class Order:
         self._name = name
         self._location = location
         self._phone = phone
-        self.my_orders = dict()
+        self.my_orders = {}
 
     def place_order(self, item, note):
         assert isinstance(item, FoodItem)
