@@ -1,4 +1,4 @@
-GiveBisBot is a food ordering management system, operrating on Telegram app platform (Telegram bot). The bot is available for Owners of restaurants.
+GiveBisBot is a food ordering management system, operating on Telegram app platform (Telegram bot). The bot is available for Owners of restaurants.
 
 ### Screenshots
 ![screenshot1](screenshots/start.jpg?raw=true "start")
